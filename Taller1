@@ -1,0 +1,81 @@
+CREATE TABLE Entidades (
+    ID INT PRIMARY KEY,
+    Sucursal VARCHAR(255),
+    Nombre VARCHAR(255),
+    Tipo VARCHAR(255)
+);
+
+CREATE TABLE Cliente (
+    ID INT PRIMARY KEY,
+    Nombre VARCHAR(255),
+    Telefono VARCHAR(15),
+    Correo VARCHAR(255)
+);
+
+CREATE TABLE Perfiles (
+    ID INT PRIMARY KEY,
+    Rol VARCHAR(255),
+    Estado VARCHAR(255),
+    Nivel_de_permisos INT
+);
+
+CREATE TABLE Transacciones (
+    ID INT PRIMARY KEY,
+    Fecha DATE,
+    Monto DECIMAL(10, 2),
+    Ordenante VARCHAR(255)
+);
+
+CREATE TABLE Bitacoras (
+    ID INT PRIMARY KEY,
+    Fecha DATE,
+    Descripcion TEXT,
+    Usuario VARCHAR(255),
+    Hora TIME
+);
+
+INSERT INTO Entidades (ID, Sucursal, Nombre, Tipo)
+VALUES
+    (1, 'SucursalA', 'Empresa1', 'TipoA'),
+    (2, 'SucursalB', 'Empresa2', 'TipoB'),
+    (3, 'SucursalC', 'Empresa3', 'TipoC'),
+    (4, 'SucursalD', 'Empresa4', 'TipoD'),
+    (5, 'SucursalE', 'Empresa5', 'TipoE');
+
+INSERT INTO Cliente (ID, Nombre, Telefono, Correo)
+VALUES
+    (1, 'Juan Pérez', '555-1234', 'juan@example.com'),
+    (2, 'Ana Rodríguez', '555-5678', 'ana@example.com'),
+    (3, 'Carlos Gómez', '555-9012', 'carlos@example.com'),
+    (4, 'María López', '555-3456', 'maria@example.com'),
+    (5, 'Luis Torres', '555-7890', 'luis@example.com');
+
+INSERT INTO Perfiles (ID, Rol, Estado, Nivel_de_permisos)
+VALUES
+    (1, 'Admin', 'Activo', 3),
+    (2, 'Usuario', 'Inactivo', 1),
+    (3, 'Supervisor', 'Activo', 2),
+    (4, 'Invitado', 'Inactivo', 1),
+    (5, 'Editor', 'Activo', 2);
+
+INSERT INTO Transacciones (ID, Fecha, Monto, Ordenante)
+VALUES
+    (1, '2024-01-31', 1000.00, 'Cliente1'),
+    (2, '2024-02-01', 500.50, 'Cliente2'),
+    (3, '2024-02-02', 750.75, 'Cliente3'),
+    (4, '2024-02-03', 1200.25, 'Cliente4'),
+    (5, '2024-02-04', 800.90, 'Cliente5');
+
+INSERT INTO Bitacoras (ID, Fecha, Descripcion, Usuario, Hora)
+VALUES
+    (1, '2024-01-31', 'Inicio de sesión', 'Usuario1', '08:30:00'),
+    (2, '2024-02-01', 'Actualización de perfil', 'Usuario2', '10:15:00'),
+    (3, '2024-02-02', 'Creación de nueva entidad', 'Usuario3', '12:45:00'),
+    (4, '2024-02-03', 'Transacción exitosa', 'Usuario4', '15:00:00'),
+    (5, '2024-02-04', 'Cierre de sesión', 'Usuario5', '17:30:00');
+
+SELECT * FROM Cliente WHERE Nombre LIKE 'A%';
+UPDATE Perfiles SET Estado = 'Inactivo' WHERE ID = 3;
+INSERT INTO Transacciones (Fecha, Monto, Ordenante) VALUES ('2024-02-05', 1500.50, 'NuevoCliente');
+ALTER TABLE Cliente ADD Direccion VARCHAR(255);
+DROP TABLE IF EXISTS Entidades;
