@@ -77,5 +77,4 @@ VALUES
 SELECT * FROM Cliente WHERE Nombre LIKE 'A%';
 UPDATE Perfiles SET Estado = 'Inactivo' WHERE ID = 3;
 INSERT INTO Transacciones (Fecha, Monto, Ordenante) VALUES ('2024-02-05', 1500.50, 'NuevoCliente');
-ALTER TABLE Cliente ADD Direccion VARCHAR(255);
 DROP TABLE IF EXISTS Entidades;
