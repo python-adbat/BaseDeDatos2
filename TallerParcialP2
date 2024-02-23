@@ -1,0 +1,120 @@
+
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS sistema_expediente;
+
+-- Usar la base de datos creada
+USE sistema_expediente;
+
+-- Tabla Usuario
+CREATE TABLE IF NOT EXISTS usuario (
+    usuario_id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) UNIQUE NOT NULL,
+    contrasena VARCHAR(255) NOT NULL
+);
+
+-- Tabla Expediente
+USE sistema_expediente;
+CREATE TABLE IF NOT EXISTS expediente (
+    expediente_id INT PRIMARY KEY AUTO_INCREMENT,
+    conductor VARCHAR(100) NOT NULL,
+    aseguradora_id INT,
+    numero_de_caso VARCHAR(50) NOT NULL,
+    tipo_de_proceso VARCHAR(50),
+    FOREIGN KEY (aseguradora_id) REFERENCES aseguradora(id)
+);
+
+-- Tabla Aseguradora
+USE sistema_expediente;
+CREATE TABLE IF NOT EXISTS aseguradora (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_aseguradora VARCHAR(100) NOT NULL,
+    ruc VARCHAR(20),
+    direccion VARCHAR(255),
+    contacto VARCHAR(100)
+);
+
+-- Tabla Juzgado
+USE sistema_expediente;
+CREATE TABLE IF NOT EXISTS juzgado (
+    id_juzgado INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_juzgado VARCHAR(100) NOT NULL,
+    corregimiento VARCHAR(100),
+    distrito VARCHAR(100),
+    direccion VARCHAR(255)
+);
+
+-- Tabla Cita
+USE sistema_expediente;
+CREATE TABLE IF NOT EXISTS cita (
+    id_cita INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT,
+    aseguradora_id INT,
+    juzgado_id INT,
+    fecha_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_cita DATE,
+    status ENUM('programada', 'realizada', 'cancelada') DEFAULT 'programada',
+    FOREIGN KEY (usuario_id) REFERENCES usuario(usuario_id),
+    FOREIGN KEY (aseguradora_id) REFERENCES aseguradora(id),
+    FOREIGN KEY (juzgado_id) REFERENCES juzgado(id_juzgado)
+);
+
+-- Tabla Reporte
+USE sistema_expediente;
+CREATE TABLE IF NOT EXISTS reporte (
+    id_reporte INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT,
+    expediente_id INT,
+    cita_id INT,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuario(usuario_id),
+    FOREIGN KEY (expediente_id) REFERENCES expediente(expediente_id),
+    FOREIGN KEY (cita_id) REFERENCES cita(id_cita)
+);
+-- Inserciones para la tabla Usuario
+INSERT INTO usuario (nombre, correo, contrasena) VALUES
+('Juan Pérez', 'juan@example.com', 'password1'),
+('María García', 'maria@example.com', 'password2'),
+('Carlos López', 'carlos@example.com', 'password3'),
+('Ana Martínez', 'ana@example.com', 'password4'),
+('Pedro Rodríguez', 'pedro@example.com', 'password5');
+
+-- Inserciones para la tabla Expediente
+INSERT INTO expediente (conductor, aseguradora_id, numero_de_caso, tipo_de_proceso) VALUES
+('Juan Pérez', 1, '123456789', 'Reclamación de seguro'),
+('María García', 2, '987654321', 'Litigio de tránsito'),
+('Carlos López', 3, '567891234', 'Reclamación de seguro'),
+('Ana Martínez', 1, '345678912', 'Litigio de tránsito'),
+('Pedro Rodríguez', 2, '789123456', 'Reclamación de seguro');
+
+-- Inserciones para la tabla Aseguradora
+INSERT INTO aseguradora (nombre_aseguradora, ruc, direccion, contacto) VALUES
+('Seguros ABC', '12345678901', 'Calle 123, Ciudad ABC', '123-456-7890'),
+('Seguros XYZ', '98765432109', 'Avenida XYZ, Ciudad XYZ', '987-654-3210'),
+('Seguros DEF', '56789123405', 'Carrera 456, Ciudad DEF', '567-891-2340'),
+('Seguros GHI', '34567891203', 'Plaza GHI, Ciudad GHI', '345-678-9120'),
+('Seguros JKL', '78912345607', 'Paseo JKL, Ciudad JKL', '789-123-4560');
+
+-- Inserciones para la tabla Juzgado
+INSERT INTO juzgado (nombre_juzgado, corregimiento, distrito, direccion) VALUES
+('Juzgado Primero Civil', 'Corregimiento A', 'Distrito 1', 'Calle 456, Ciudad A'),
+('Juzgado Segundo Civil', 'Corregimiento B', 'Distrito 2', 'Avenida B, Ciudad B'),
+('Juzgado Tercero Civil', 'Corregimiento C', 'Distrito 3', 'Carrera 789, Ciudad C'),
+('Juzgado Cuarto Civil', 'Corregimiento D', 'Distrito 4', 'Plaza D, Ciudad D'),
+('Juzgado Quinto Civil', 'Corregimiento E', 'Distrito 5', 'Paseo E, Ciudad E');
+
+-- Inserciones para la tabla Cita
+INSERT INTO cita (usuario_id, aseguradora_id, juzgado_id, fecha_cita) VALUES
+(1, 1, 1, '2024-02-25'),
+(2, 2, 2, '2024-02-26'),
+(3, 3, 3, '2024-02-27'),
+(4, 1, 4, '2024-02-28'),
+(5, 2, 5, '2024-02-29');
+
+-- Inserciones para la tabla Reporte (solo como ejemplo, puedes adaptar según tus necesidades)
+INSERT INTO reporte (usuario_id, expediente_id, cita_id) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4),
+(5, 5, 5);
