@@ -1,0 +1,77 @@
+CREATE DATABASE carteraElectronica;
+USE carteraElectronica;
+
+-- Crear la tabla Usuario
+CREATE TABLE IF NOT EXISTS Usuario (
+    id_usuario INT PRIMARY KEY,
+    nombre VARCHAR(255),
+    contrasena VARCHAR(255),
+    balance_cuenta DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS Contacto (
+    id_usuario INT PRIMARY KEY,
+    id_referido INT,
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+);
+
+-- Crear la tabla Transaccion
+CREATE TABLE IF NOT EXISTS Transaccion (
+    id_solicitud INT PRIMARY KEY,
+    id_remitente INT,
+    id_destinatario INT,
+    cantidad DECIMAL(10,2),
+    razon VARCHAR(255),
+    estado VARCHAR(255),
+    marca_de_tiempo TIMESTAMP,
+    categoria VARCHAR(255),
+    solicitado_o_mandado VARCHAR(255),
+    FOREIGN KEY (id_remitente) REFERENCES Usuario(id_usuario),
+    FOREIGN KEY (id_destinatario) REFERENCES Usuario(id_usuario)
+);
+
+-- Crear la tabla DetalleUsuario
+CREATE TABLE IF NOT EXISTS DetalleUsuario (
+    numero_cuenta VARCHAR(255),
+    tipo VARCHAR(255),
+    telefono VARCHAR(255),
+    id_usuario INT PRIMARY KEY,
+    numero_identificacion VARCHAR(255),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+);
+
+-- Insertar datos de prueba en Usuario
+INSERT INTO Usuario (id_usuario, nombre, contrasena, balance_cuenta) VALUES
+(1, 'Carlos Arauz', 'contrasena1', 1000.00),
+(2, 'Guillermo Small', 'contrasena2', 500.00),
+(3, 'Maria Cortez', 'contrasena3', 750.00),
+(4, 'Elias Sanjur', 'contrasena4', 1200.00),
+(5, 'Ana Jaramillo', 'contrasena5', 300.00);
+
+-- Insertar datos de prueba en Contacto
+INSERT INTO Contacto (id_usuario, id_referido) VALUES
+(1, 2),
+(2, 3),
+(3, 4),
+(4, 5),
+(5, 1);
+
+-- Insertar datos de prueba en Transaccion
+INSERT INTO Transaccion (id_solicitud, id_remitente, id_destinatario, cantidad, razon, estado, marca_de_tiempo, categoria, solicitado_o_mandado) VALUES
+(1021451, 1, 2, 50.00, 'Pago de deuda', 'Completado', NOW(), 'Pago', 'Solicitado'),
+(1021452, 3, 1, 200.00, 'Compra de productos', 'Pendiente', NOW(), 'Compra', 'Mandado'),
+(1021453, 4, 5, 75.00, 'Pago de servicio', 'Completado', NOW(), 'Pago', 'Solicitado'),
+(1021454, 2, 4, 100.00, 'Transferencia entre usuarios', 'Completado', NOW(), 'Transferencia', 'Mandado'),
+(1021455, 5, 3, 25.00, 'Pago de suscripción', 'Pendiente', NOW(), 'Pago', 'Mandado');
+
+-- Insertar datos de prueba en DetalleUsuario
+INSERT INTO DetalleUsuario (numero_cuenta, tipo, telefono, id_usuario, numero_identificacion) VALUES
+('1234567890', 'Ahorros', '12345678', 1, '123456789-0'),
+('9876543210', 'Corriente', '98765432', 2, '987654321-0'),
+('5678901234', 'Ahorros', '56789012', 3, '567890123-0'),
+('3210987654', 'Corriente', '32109876', 4, '321098765-0'),
+('6543210987', 'Ahorros', '65432109', 5, '654321098-0');
+
+-- Hector Campos, Adrian Batista
+-- En la tabla usuario no se agrego la columna "salt" ya que la misma no nos hacia sentido y no le aportaba valor a la tabla.
+-- en la tabla DetalleUsuario se remplazo la columna aadhar.doc por numero_identificacion ya que luego del analisis concluimos que aportaba mas valor.
